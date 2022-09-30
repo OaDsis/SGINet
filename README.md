@@ -23,8 +23,7 @@ You can download above datasets from [here](https://drive.google.com/drive/folde
 ### Model
 - train_epoch_200_psp101.pth
 
-You can download above pre-trained model of PSPNet101 from [here](https://drive.google.com/drive/folders/1L5LeK-Vl8KUWuGfsMbrw1gauig5lodHy?usp=sharing) and put it in .
-"./SGINet/src/initmodel/train_epoch_200_psp101.pth"
+You can download above pre-trained model of PSPNet101 from [here](https://drive.google.com/drive/folders/1L5LeK-Vl8KUWuGfsMbrw1gauig5lodHy?usp=sharing) and put it in "./SGINet/src/initmodel/train_epoch_200_psp101.pth".
 
 ### Usage
 #### Prepare dataset:
