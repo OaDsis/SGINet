@@ -18,12 +18,12 @@ Data-driven single image deraining (SID) models have achieved greater progress b
 - Cityscapes_syn, inclue 100mm and 200mm
 - Cityscapes_real
 
-You can download above datasets from [here](https://drive.google.com/drive/folders/1L5LeK-Vl8KUWuGfsMbrw1gauig5lodHy?usp=sharing).
+You can download above datasets from [Baidu Drive](https://pan.baidu.com/s/1XVw08QZKSEWaTtcCmozUEQ) (Key：d4sn).
 
 ### Model
 - train_epoch_200_psp101.pth
 
-You can download above pre-trained model of PSPNet101 from [here](https://drive.google.com/drive/folders/1L5LeK-Vl8KUWuGfsMbrw1gauig5lodHy?usp=sharing) and put it in "./SGINet/src/initmodel/train_epoch_200_psp101.pth".
+You can also download above pre-trained model of PSPNet101 from [Baidu Drive](https://pan.baidu.com/s/1XVw08QZKSEWaTtcCmozUEQ) (Key：d4sn) and put it in "./SGINet/src/initmodel/train_epoch_200_psp101.pth".
 
 ### Usage
 #### Prepare dataset:
