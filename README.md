@@ -1,6 +1,10 @@
 # SGINet: Toward Sufficient Interaction Between Single Image Deraining and Semantic Segmentation (ACM MM 2022)
 Yanyan Wei, Zhao Zhang, Huan Zheng, Richang Hong, Yi Yang, Meng Wang
 
+### Update
+2022.10.26 Fix the code and re-upload the datasets, if you have downloaded our datasets, please re-download the **Cityscapes_syn (200mm)** file in data link, and replace the previous one.
+
+
 ### Abstract
 Data-driven single image deraining (SID) models have achieved greater progress by simulations, but there is still a large gap between current deraining performance and practical high-level applications, since high-level semantic information is usually neglected in current studies. Although few studies jointly considered high-level tasks (e.g., segmentation) to enable the model to learn more high-level information, there are two obvious shortcomings. First, they require the segmentation labels for training, limiting their operations on other datasets without high-level labels. Second, high- and low-level information are not fully interacted, hence having limited improvement in both deraining and segmentation tasks. In this paper, we propose a Semantic Guided Interactive Network (SGINet), which considers the sufficient interaction between SID and semantic segmentation using a three-stage deraining manner, i.e., coarse deraining, semantic information extraction, and semantics guided deraining. Specifically, a Full Resolution Module (FRM) without down-/up-sampling is proposed to predict the coarse deraining images without context damage. Then, a Segmentation Extracting Module (SEM) is designed to extract accurate semantic information. We also develop a novel contrastive semantic discovery (CSD) loss, which can instruct the process of semantic segmentation without real semantic segmentation labels. Finally, a triple-direction U-net-based Semantic Interaction Module (SIM) takes advantage of the coarse deraining images and semantic information for fully interacting low-level with high-level tasks. Extensive simulations on the newly- constructed complex datasets Cityscapes_syn and Cityscapes_real demonstrated that our model could obtain more promising results. Overall, our SGINet achieved SOTA deraining and segmentation performance in both simulation and real-scenario data, compared with other representative SID methods. 
 
@@ -15,7 +19,7 @@ Data-driven single image deraining (SID) models have achieved greater progress b
 - torchvision 0.11.1+cu113
 
 ### Datasets
-- Cityscapes_syn, inclue 100mm and 200mm
+- Cityscapes_syn, include two types rain speed, i.e, 100mm and 200mm. There are 2,975, 1,525, and 500 image pairs in trainset, testset, and valset, respectively.
 - Cityscapes_real
 
 You can download above datasets from [Baidu Drive](https://pan.baidu.com/s/1XVw08QZKSEWaTtcCmozUEQ) (Key：d4sn).
