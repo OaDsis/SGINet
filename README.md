@@ -2,7 +2,7 @@
 Yanyan Wei, Zhao Zhang, Huan Zheng, Richang Hong, Yi Yang, Meng Wang
 
 ### Update
-2022.10.26 Fix the code and re-upload the datasets, if you have downloaded our datasets, please re-download the **Cityscapes_syn (200mm)** file in data link, and replace the previous one. If you have not download 'resnet101_v2.pth' and put it in "./SGINet/src/initmodel", please down it.
+2022.10.26 Fix the code and re-upload the datasets, if you have downloaded our datasets, please re-download the **Cityscapes_syn (200mm)** file in data link, and replace the previous one. If you have not download 'resnet101_v2.pth', please down it and put it in "./SGINet/src/initmodel".
 
 
 ### Abstract
