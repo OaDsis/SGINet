@@ -6,13 +6,13 @@ import numpy as np
 import torch
 from torch.autograd import Variable
 from utils import *
-from model.degnet import deg_net
+from model.sginet import sginet
 import time
 import model.pspnet as seg
 import torch.nn as nn
 
 
-parser = argparse.ArgumentParser(description="RCDNet_Test")
+parser = argparse.ArgumentParser(description="Test")
 parser.add_argument("--model_dir", type=str, default="./syn100l_models", help='path to model files')
 parser.add_argument("--data_path", type=str, default="./syn100l/test/small/rain", help='path to testing data')
 parser.add_argument('--num_M', type=int, default=32, help='the number of rain maps')
@@ -41,7 +41,7 @@ def print_network(net):
 def main():
     # Build model
     print('Loading model ...\n')
-    model = deg_net().cuda()
+    model = sginet().cuda()
     seg_model = seg.PSPNet()
     seg_model = nn.DataParallel(seg_model)
     seg_model = seg_model.cuda()
@@ -70,7 +70,7 @@ def main():
                     torch.cuda.synchronize()
                 start_time = time.time()
 
-                coarse_pred = model(O, None, None, True) * 255   # 模型推导过程
+                coarse_pred = model(O, None, None, True) * 255
                 seg_pred = seg_model(coarse_pred)
                 seg_gray = seg_pred.argmax(dim=1)
                 seg_gray = seg_gray.unsqueeze(1).float()
@@ -82,7 +82,7 @@ def main():
                 time_test += dur_time
                 print(img_name, ': ', dur_time)
             if opt.use_GPU:
-                save_out = np.uint8(out.data.cpu().numpy().squeeze())   #back to cpu
+                save_out = np.uint8(out.data.cpu().numpy().squeeze())
             else:
                 save_out = np.uint8(out.data.numpy().squeeze())
             save_out = save_out.transpose(1, 2, 0)

@@ -168,7 +168,7 @@ class PSANet(nn.Module):
         if self.use_psa:
             x = self.psa(x)
         x = self.cls(x)
-        x = (torch.tanh(x) + 1) / 2         # 新增这句，将tensor范围控制在（0,1）
+        x = (torch.tanh(x) + 1) / 2
         if self.zoom_factor != 1:
             x = F.interpolate(x, size=(h, w), mode='bilinear', align_corners=True)
 

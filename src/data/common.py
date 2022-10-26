@@ -9,10 +9,6 @@ from torchvision import transforms
 def get_patch(*args, patch_size=96, scale=1, multi_scale=False):
     ih, iw = args[0].shape[:2]
 
-    #p = scale if multi_scale else 1
-    #tp = p * patch_size
-    #ip = tp // scale
-
     tp = patch_size
     ip = patch_size
 
@@ -20,7 +16,6 @@ def get_patch(*args, patch_size=96, scale=1, multi_scale=False):
     ix = random.randrange(0, iw - ip + 1)
     iy = random.randrange(0, ih - ip + 1)
 
-    #tx, ty = scale * ix, scale * iy
     tx, ty = ix, iy
 
     ret = [
@@ -61,10 +56,7 @@ def augment(*args, hflip=True, rot=True):
     rot90 = rot and random.random() < 0.5
 
     def _augment(img):
-        if hflip: img = img[:, ::-1, :]
-    #    if vflip: img = img[::-1, :, :]
-      #  if rot90: img = img.transpose(1, 0, 2)
-        
+        if hflip: img = img[:, ::-1, :]        
         return img
 
     return [_augment(a) for a in args]

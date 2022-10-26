@@ -47,7 +47,7 @@ parser.add_argument('--model_dir', type=str, default='./initmodel',
                     help='demo image directory')
                     
 # Model specifications
-parser.add_argument('--model', default='degnet',
+parser.add_argument('--model', default='sginet',
                     help='model name')
 parser.add_argument('--act', type=str, default='relu',
                     help='activation function')
@@ -139,7 +139,7 @@ parser.add_argument('--skip_threshold', type=float, default='1e6',
                     help='skipping batch that has large error')
 
 # Log specifications
-parser.add_argument('--save', type=str, default='RCDNet_syn',
+parser.add_argument('--save', type=str, default='.',
                     help='file name to save')
 parser.add_argument('--load', type=str, default='.',
                     help='file name to load')

@@ -36,10 +36,7 @@ class SRData(data.Dataset):
             os.makedirs(path_bin, exist_ok=True)
 
         list_hr, list_lr = self._scan()
-        # pdb.set_trace()
         if args.ext.find('bin') >= 0:
-            # Binary files are stored in 'bin' folder
-            # If the binary file exists, load it. If not, make it.
             list_hr, list_lr = self._scan()
             self.images_hr = self._check_and_load(
                 args.ext, list_hr, self._name_hrbin()
@@ -82,11 +79,8 @@ class SRData(data.Dataset):
                         self._check_and_load(
                             args.ext, [l], b,  verbose=True, load=False
                         )
-        # pdb.set_trace()
         if train:
-            # pdb.set_trace()
-            self.repeat \
-                = args.test_every // (len(self.images_hr) // args.batch_size)
+            self.repeat = 1
     
     # Below functions as used to prepare images
     def _scan(self):
@@ -206,8 +200,7 @@ class SRData(data.Dataset):
         else:
             ih, iw = lr.shape[:2]
             hr = hr[0:ih, 0:iw]
-            #hr = hr[0:ih * scale, 0:iw * scale]
-
+            
         return lr, hr
 
     def set_scale(self, idx_scale):

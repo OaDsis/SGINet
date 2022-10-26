@@ -38,8 +38,7 @@ class Trainer():
     def train(self):
         self.scheduler.step()
         self.loss.step()
-        epoch = self.scheduler.last_epoch #+ 1
-      #  lr = self.scheduler.get_lr()[0]
+        epoch = self.scheduler.last_epoch
         lr = self.optimizer.param_groups[0]['lr']
         self.ckp.write_log(
             '[Epoch {}]\tLearning rate: {:.2e}'.format(epoch, Decimal(lr))
@@ -56,7 +55,7 @@ class Trainer():
             self.model.zero_grad()
             self.optimizer.zero_grad()
 
-            coarse_pred = self.model(lr, None, None, True) * 255    # 模型推导过程
+            coarse_pred = self.model(lr, None, None, True) * 255
             seg_pred = self.model1(coarse_pred)
             seg_gray = seg_pred.argmax(dim=1)
             seg_gray = seg_gray.unsqueeze(1).float()
@@ -73,8 +72,8 @@ class Trainer():
                     batch + 1, loss.item()
                 ))
             timer_model.hold()
-            if (batch + 1) % self.args.print_every == 0:        # how many batches to wait before logging training status，默认是100个batches
-                self.ckp.write_log('[{}/{}]\t{}\t{:.1f}+{:.1f}s'.format(        # 打印并写入log.txt，内容为：[8000/14875]	[MSE: 23874.2129]	196.8+19.8s
+            if (batch + 1) % self.args.print_every == 0: 
+                self.ckp.write_log('[{}/{}]\t{}\t{:.1f}+{:.1f}s'.format(
                     (batch + 1) * self.args.batch_size,
                     len(self.loader_train.dataset),
                     self.loss.display_loss(batch),
@@ -82,8 +81,8 @@ class Trainer():
                     timer_data.release()))
             timer_data.tic()
         print(loss)
-        self.loss.end_log(len(self.loader_train))       # 结束loss_log.pt
-        self.error_last = self.loss.log[-1, -1]         # 更新error_last的值
+        self.loss.end_log(len(self.loader_train))
+        self.error_last = self.loss.log[-1, -1]
 
     def test(self):
         epoch = self.scheduler.last_epoch# + 1
@@ -99,62 +98,60 @@ class Trainer():
                 self.loader_test.dataset.set_scale(idx_scale)
                 tqdm_test = tqdm(self.loader_test, ncols=80)
                 if self.args.test_only == True:
-                    for idx_img, (lr, hr, filename, _) in enumerate(tqdm_test):    # Rain200H
+                    for idx_img, (lr, hr, filename, _) in enumerate(tqdm_test):
                         filename = filename[0]
-                        no_eval = (hr.nelement() == 1)      # hr.nelement()不清楚是什么
+                        no_eval = (hr.nelement() == 1)
                         if not no_eval:
                             lr, hr = self.prepare(lr, hr)
                         else:
                             lr, = self.prepare(lr)
 
-                        coarse_pred = self.model(lr, None, None, True) * 255   # 模型推导过程
+                        coarse_pred = self.model(lr, None, None, True) * 255
                         seg_pred = self.model1(coarse_pred)
                         seg_gray = seg_pred.argmax(dim=1)
                         seg_gray = seg_gray.unsqueeze(1).float()
                         refined_pred = self.model(lr, coarse_pred, seg_gray, False) * 255
 
-                        sr = utility.quantize(refined_pred, self.args.rgb_range)    # restored background at the last stage，args.rgb_range = 255
+                        sr = utility.quantize(refined_pred, self.args.rgb_range)
                         save_list = [sr]
                         if not no_eval:
-                            eval_acc += utility.calc_psnr(      # 计算psnr
+                            eval_acc += utility.calc_psnr(
                                 sr, hr, scale, self.args.rgb_range,
                                 benchmark=self.loader_test.dataset.benchmark
                             )
-                        #    save_list.extend([lr, hr])
 
-                        if self.args.save_results:      # 训练时候不存储结果，测试时候会存储结果
+                        if self.args.save_results:
                             self.ckp.save_results(filename, save_list, scale)
                 else:
-                    for idx_img, (lr, hr, filename) in enumerate(tqdm_test):    # Rain200L
+                    for idx_img, (lr, hr, filename) in enumerate(tqdm_test):
                         filename = filename[0]
-                        no_eval = (hr.nelement() == 1)      # hr.nelement()不清楚是什么
+                        no_eval = (hr.nelement() == 1)
                         if not no_eval:
                             lr, hr = self.prepare(lr, hr)
                         else:
                             lr, = self.prepare(lr)
 
-                        coarse_pred = self.model(lr, None, None, True) * 255   # 模型推导过程
+                        coarse_pred = self.model(lr, None, None, True) * 255
                         seg_pred = self.model1(coarse_pred)
                         seg_gray = seg_pred.argmax(dim=1)
                         seg_gray = seg_gray.unsqueeze(1).float()
                         refined_pred = self.model(lr, coarse_pred, seg_gray, False) * 255
 
-                        sr = utility.quantize(refined_pred, self.args.rgb_range)    # restored background at the last stage，args.rgb_range = 255
+                        sr = utility.quantize(refined_pred, self.args.rgb_range)
                         save_list = [sr]
                         if not no_eval:
-                            eval_acc += utility.calc_psnr(      # 计算psnr
+                            eval_acc += utility.calc_psnr(
                                 sr, hr, scale, self.args.rgb_range,
                                 benchmark=self.loader_test.dataset.benchmark
                             )
-                        #    save_list.extend([lr, hr])
 
-                        if self.args.save_results:      # 训练时候不存储结果，测试时候会存储结果
+                        if self.args.save_results:
                             self.ckp.save_results(filename, save_list, scale)
 
                 self.ckp.log[-1, idx_scale] = eval_acc / len(self.loader_test)
                 best = self.ckp.log.max(0)
                 self.ckp.write_log(
-                    '[{} x{}]\tPSNR: {:.3f} (Best: {:.3f} @epoch {})'.format(      # 将测试结果写入log.txt中：
+                    '[{} x{}]\tPSNR: {:.3f} (Best: {:.3f} @epoch {})'.format(
                         self.args.data_test,
                         scale,
                         self.ckp.log[-1, idx_scale],
@@ -168,9 +165,9 @@ class Trainer():
         )
         if not self.args.test_only:
             self.ckp.save(self, epoch, is_best=(best[1][0] + 1 == epoch))
-            torch.save(self.model1.state_dict(), os.path.join("/root/autodl-nas/weiyanyan/SGINet/experiment/", self.args.save, 'model', 'pspnet_latest.pt'))
-            if (best[1][0] + 1 == epoch):     # 判断是否为最好的模型并保存
-                torch.save(self.model1.state_dict(), os.path.join("/root/autodl-nas/weiyanyan/SGINet/experiment/", self.args.save, 'model', 'pspnet_best.pt'))
+            torch.save(self.model1.state_dict(), os.path.join("../experiment/", self.args.save, 'model', 'pspnet_latest.pt'))
+            if (best[1][0] + 1 == epoch):
+                torch.save(self.model1.state_dict(), os.path.join("../experiment/", self.args.save, 'model', 'pspnet_best.pt'))
 
     def prepare(self, *args):
         device = torch.device('cpu' if self.args.cpu else 'cuda:0')
@@ -185,5 +182,5 @@ class Trainer():
             self.test()
             return True
         else:
-            epoch = self.scheduler.last_epoch #+ 1
+            epoch = self.scheduler.last_epoch
             return epoch >= self.args.epochs

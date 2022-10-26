@@ -4,11 +4,11 @@ import torch
 import torch.nn as nn
 
 def make_model():
-    return deg_net()
+    return sginet()
 
-class deg_net(nn.Module):
+class sginet(nn.Module):
     def __init__(self):
-        super(deg_net, self).__init__()
+        super(sginet, self).__init__()
         self.u_net_light = fr_net(3, 3)
         self.u_net_heavy = u_net_heavy(6, 3)
 
@@ -157,69 +157,69 @@ class u_net_heavy(nn.Module):
         x = torch.cat([x, y], 1)
         x_1 = self.encoder_1(x)
         x_2 = self.encoder_2(x_1)
-        x_2 = self.down_1(x_2)                  # 256, num*1
+        x_2 = self.down_1(x_2)
         x_3 = self.encoder_3(x_2)
         x_4 = self.encoder_4(x_3)
-        x_4 = self.down_2(x_4)                  # 128, num*2
+        x_4 = self.down_2(x_4)
         x_5 = self.encoder_5(x_4)
         x_6 = self.encoder_6(x_5)
-        x_6 = self.down_3(x_6)                  # 64, num*4
+        x_6 = self.down_3(x_6)
         x_7 = self.encoder_7(x_6)
         x_8 = self.encoder_8(x_7)
-        x_8 = self.down_4(x_8)                  # 32, num*8
+        x_8 = self.down_4(x_8)
         x_9 = self.encoder_9(x_8)
         x_10 = self.encoder_10(x_9)
-        x_10 = self.down_5(x_10)                # 16, num*16
+        x_10 = self.down_5(x_10)
         x_encoder = x_10
         return x_2, x_4, x_6, x_8, x_10
 
     def sementic(self, coarse, sementic, x_2, x_4, x_6, x_8):
-        x1 = torch.cat([coarse, sementic], 1)    # 512
+        x1 = torch.cat([coarse, sementic], 1)
         s_1 = self.sementic_1(x1)
         s_2 = self.sementic_2(s_1)
-        s_2 = self.trans_1(s_2)                 # 256
+        s_2 = self.trans_1(s_2)
         x2 = torch.cat([s_2, x_2], 1)
         s_3 = self.sementic_3(x2)
         s_4 = self.sementic_4(s_3)
-        s_4 = self.trans_2(s_4)                 # 128
+        s_4 = self.trans_2(s_4)
         x3 = torch.cat([s_4, x_4], 1)
         s_5 = self.sementic_5(x3)
         s_6 = self.sementic_6(s_5)
-        s_6 = self.trans_3(s_6)                 # 64
+        s_6 = self.trans_3(s_6)
         x4 = torch.cat([s_6, x_6], 1)
         s_7 = self.sementic_7(x4)
         s_8 = self.sementic_8(s_7)
-        s_8 = self.trans_4(s_8)                 # 32
+        s_8 = self.trans_4(s_8)
         x5 = torch.cat([s_8, x_8], 1)
         s_9 = self.sementic_9(x5)
         s_10 = self.sementic_10(s_9)
-        s_10 = self.trans_5(s_10)               # 16
+        s_10 = self.trans_5(s_10)
         s_encoder = s_10
         return s_2, s_4, s_6, s_8, s_10
 
     def decoder(self, x, s_2, s_4, s_6, s_8, s_10):
-        x_11 = self.up_1(torch.cat([x, s_10], 1))       # 16-->32
+        x_11 = self.up_1(torch.cat([x, s_10], 1))
         x_12 = self.decoder_1(x_11)
         x_12 = self.decoder_2(x_12)
-        x_13 = self.up_2(torch.cat([x_12, s_8], 1))     # 32-->64
+        x_13 = self.up_2(torch.cat([x_12, s_8], 1))
         x_14 = self.decoder_3(x_13)
         x_14 = self.decoder_4(x_14)
-        x_15 = self.up_3(torch.cat([x_14, s_6], 1))     # 64-->128
+        x_15 = self.up_3(torch.cat([x_14, s_6], 1))
         x_16 = self.decoder_5(x_15)
         x_16 = self.decoder_6(x_16)
-        x_17 = self.up_4(torch.cat([x_16, s_4], 1))     # 128-->256
+        x_17 = self.up_4(torch.cat([x_16, s_4], 1))
         x_18 = self.decoder_7(x_17)
         x_18 = self.decoder_8(x_18)
-        x_19 = self.up_5(torch.cat([x_18, s_2], 1))     # 256-->512
+        x_19 = self.up_5(torch.cat([x_18, s_2], 1))
         x_20 = self.decoder_9(x_19)
         x_20 = self.decoder_10(x_20)
-        x_20 = (torch.tanh(x_20) + 1) / 2   # 映射到（0,1）
+        x_20 = (torch.tanh(x_20) + 1) / 2
         return x_20
         
     def forward(self, rain, coarse, sementic):
         x_2, x_4, x_6, x_8, x_10 = self.encoder(rain, coarse)
         s_2, s_4, s_6, s_8, s_10 = self.sementic(coarse, sementic, x_2, x_4, x_6, x_8)
-        x_middle =  self.middle(x_10)           # 16
+        x_middle =  self.middle(x_10)
         out = self.decoder(x_middle, s_2, s_4, s_6, s_8, s_10)
         return out
 
@@ -227,7 +227,6 @@ class fr_net(nn.Module):
     def __init__(self, dim_in, dim_out):
         super(fr_net, self).__init__()
         
-        # initial
         num = 32
 
         # encoder        
@@ -239,7 +238,6 @@ class fr_net(nn.Module):
         # Middle
         blocks = []
         for _ in range(4):
-            # block = res_bolock(num*4)
             block = Conv_layer(num*4, num*4, 3, 1, 1)
             blocks.append(block)
         self.middle = nn.Sequential(*blocks)
@@ -251,17 +249,17 @@ class fr_net(nn.Module):
         self.decoder_4 = nn.Conv2d(num, dim_out, 3, 1, 1)
 
     def encoder(self, x):
-        x_1 = self.encoder_1(x) # c x h x w
-        x_2 = self.encoder_2(x_1) # 2c x h x w
-        x_3 = self.encoder_3(x_2) # 2c x h x w
-        x_4 = self.encoder_4(x_3) # 4c x h x w
+        x_1 = self.encoder_1(x)
+        x_2 = self.encoder_2(x_1)
+        x_3 = self.encoder_3(x_2)
+        x_4 = self.encoder_4(x_3)
         return x_2, x_4
     
     def decoder(self, x, x_2, x_4):
-        x_5 = self.decoder_1(torch.cat([x, x_4], 1)) # 2c x h x w
-        x_6 = self.decoder_2(x_5) # 2c x h x w
-        x_7 = self.decoder_3(torch.cat([x_6, x_2], 1)) # c x h x w
-        x_8 = self.decoder_4(x_7) # 3 x h x w
+        x_5 = self.decoder_1(torch.cat([x, x_4], 1))
+        x_6 = self.decoder_2(x_5)
+        x_7 = self.decoder_3(torch.cat([x_6, x_2], 1))
+        x_8 = self.decoder_4(x_7)
         x_8 = (torch.tanh(x_8) + 1) / 2
         return x_8
 
