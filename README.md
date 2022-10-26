@@ -47,11 +47,11 @@ Taking training Cityscapes_syn (200mm) as an example. Download them (including t
 "./SGINet/data/val/200mm/norain/norain-***.png"
 #### Train:
 ```
-python main.py --save 200mm_v1 --model sginet --scale 2 --epochs 100 --batch_size 4 --patch_size 512 --data_train RainHeavy --n_threads 0 --data_test RainHeavyTest --stage 1 --lr_decay 25 --gamma 0.2 --num_M 32 --num_Z 32 --data_range 1-2975/1-1525 --loss 1*SSIM+1*PER+1*SEG+0.01*MSE
+python main.py --save 200mm --model sginet --scale 2 --epochs 200 --batch_size 4 --patch_size 512 --data_train RainHeavy --n_threads 0 --data_test RainHeavyTest --stage 1 --lr_decay 25 --gamma 0.2 --num_M 32 --num_Z 32 --data_range 1-2975/1-1525 --loss 1*SSIM+1*PER+1*SEG+0.01*MSE
 ```
 #### Test:
 ```
-python test_RCDNet.py --model_dir ../experiment/200mm_v1/model --data_path ../data/test/200mm/rain --save_path ../experiment/200mm_v1/results
+python test.py --model sginet --model_dir ../experiment/200mm/model --data_path ../data/test/200mm/rain --save_path ../experiment/200mm/results
 ```
 ### Citation
 Please cite our paper if you find the code useful for your research.
