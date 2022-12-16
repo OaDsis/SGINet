@@ -28,7 +28,7 @@ You can download above datasets from [Baidu Drive](https://pan.baidu.com/s/14Qj0
 - train_epoch_200_psp101.pth
 - resnet101_v2.pth
 
-You need download above pre-trained models of PSPNet101 from [Baidu Drive](https://pan.baidu.com/s/1VWUE0n_yOKUHOfL1KbI-ng) (Key：lewy) and put it in "./SGINet/src/initmodel/train_epoch_200_psp101.pth" and "./SGINet/src/initmodel/resnet101_v2.pth".
+You need download above pre-trained models of PSPNet101 from [Baidu Drive](https://pan.baidu.com/s/14Qj0ZX-SOcbKZFkqq12gcg) (Key：ky93) and put it in "./SGINet/src/initmodel/train_epoch_200_psp101.pth" and "./SGINet/src/initmodel/resnet101_v2.pth".
 
 ### Usage
 #### Prepare dataset:
