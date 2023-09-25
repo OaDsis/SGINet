@@ -22,13 +22,13 @@ Data-driven single image deraining (SID) models have achieved greater progress b
 - Cityscapes_syn, includes two types of rain speed, i.e., 100mm and 200mm. There are 2,975, 1,525, and 500 image pairs in the trainset, testset, and valset, respectively.
 - Cityscapes_real
 
-You can download above datasets from [Baidu Drive](https://pan.baidu.com/s/1WnD5wfp1SmoTJ1Kj46DbFg?pwd=4mhw) (Key: 4mhw).
+You can download above datasets from [Baidu Drive](https://pan.baidu.com/s/1wUkpcZMwspCYlSDto9fssw?pwd=hsz9) (Key: hsz9).
 
 ### Model
 - train_epoch_200_psp101.pth
 - resnet101_v2.pth
 
-You need download above pre-trained models of PSPNet101 from [Baidu Drive](https://pan.baidu.com/s/1WnD5wfp1SmoTJ1Kj46DbFg?pwd=4mhw) (Key: 4mhw) and put it in "./SGINet/src/initmodel/train_epoch_200_psp101.pth" and "./SGINet/src/initmodel/resnet101_v2.pth".
+You need download above pre-trained models of PSPNet101 from [Baidu Drive](https://pan.baidu.com/s/1wUkpcZMwspCYlSDto9fssw?pwd=hsz9) (Key: hsz9) and put it in "./SGINet/src/initmodel/train_epoch_200_psp101.pth" and "./SGINet/src/initmodel/resnet101_v2.pth".
 
 ### Usage
 #### Prepare dataset:
